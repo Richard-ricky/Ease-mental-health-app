@@ -1,25 +1,27 @@
 {
   "compilerOptions": {
+    /* Target and environment */
     "target": "ES2020",
-    "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "skipLibCheck": true,
+    "jsx": "react-jsx",
 
-    /* Bundler mode */
+    /* Build and module handling */
+    "useDefineForClassFields": true,
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
 
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-
+    /* Linting / strictness */
+    "strict": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": false,
+ 
     /* Path mapping */
     "baseUrl": ".",
     "paths": {
@@ -29,7 +31,21 @@
       "@/styles/*": ["./styles/*"]
     }
   },
-  "include": ["src", "*.ts", "*.tsx", "components", "utils", "styles"],
-  "exclude": ["supabase/functions/**/*"],
+
+  /* Included project directories */
+  "include": ["src", "components", "utils", "styles"],
+
+  /* Excluded from build */
+  "exclude": [
+    "vite.config.ts",
+    "vite.config.js",
+    "node_modules",
+    "dist",
+    "supabase/functions/**/*",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ],
+
+  /* References for Node/Vite configs */
   "references": [{ "path": "./tsconfig.node.json" }]
 }

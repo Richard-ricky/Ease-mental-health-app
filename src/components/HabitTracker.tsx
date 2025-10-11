@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Input } from "./ui/input";
@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Plus, Target, Trophy, Flame, Star, Heart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Habit, HabitStats } from "../../types/habit";
+import { Habit, HabitStats } from "../../types/habit.ts";
 import { HabitCard } from "./HabitCard";
 import { 
   calculateHabitStats, 
@@ -19,7 +19,7 @@ import {
   initializeDefaultHabits,
   saveHabitsToStorage,
   loadHabitsFromStorage
-} from "../../utils/habitHelpers";
+} from "../../utils/habitHelpers.ts";
 
 export function HabitTracker() {
   const [habits, setHabits] = useState<Habit[]>([]);
@@ -86,7 +86,7 @@ export function HabitTracker() {
     const updatedHabits = habits.map(habit => {
       if (habit.id === habitId) {
         const existingIndex = habit.completions.findIndex(c => c.date === date);
-        let updatedCompletions = [...habit.completions];
+        const updatedCompletions = [...habit.completions];
         
         if (existingIndex >= 0) {
           updatedCompletions[existingIndex] = {
@@ -174,7 +174,7 @@ export function HabitTracker() {
 
               <div>
                 <label className="block mb-1 text-sm font-medium">Category</label>
-                <Select value={newHabit.category} onValueChange={(value:string) => setNewHabit({...newHabit, category: value as any})}>
+                <Select value={newHabit.category} onValueChange={(value: 'wellness' | 'fitness' | 'mindfulness' | 'productivity' | 'social' | 'learning') => setNewHabit({...newHabit, category: value})}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -191,7 +191,7 @@ export function HabitTracker() {
 
               <div>
                 <label className="block mb-1 text-sm font-medium">Frequency</label>
-                <Select value={newHabit.frequency} onValueChange={(value:string) => setNewHabit({...newHabit, frequency: value as any})}>
+                <Select value={newHabit.frequency} onValueChange={(value: 'daily' | 'weekly' | 'monthly') => setNewHabit({...newHabit, frequency: value})}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -228,7 +228,7 @@ export function HabitTracker() {
           { label: 'Active Streaks', value: stats.activeStreaks, icon: Flame, color: 'orange' },
           { label: 'Completion Rate', value: `${stats.completionRate}%`, icon: Trophy, color: 'green' },
           { label: 'Total Completions', value: stats.totalCompletions, icon: Star, color: 'purple' }
-        ].map((stat, index) => (
+        ].map((stat) => (
           <Card key={stat.label} className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
             <CardContent className="p-6 text-center">
               <div className={`text-3xl font-bold text-${stat.color}-600 dark:text-${stat.color}-400`}>
@@ -268,7 +268,7 @@ export function HabitTracker() {
             </motion.div>
           ) : (
             <div className="space-y-6">
-              {habits.map((habit, index) => (
+              {habits.map((habit) => (
                 <HabitCard
                   key={habit.id}
                   habit={habit}

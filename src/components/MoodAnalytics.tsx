@@ -4,9 +4,9 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { TrendingUp, TrendingDown, BarChart3, PieChart, Calendar, Brain, Lightbulb, Target, Smile, Heart, Zap, Moon, Sun } from "lucide-react";
+import { TrendingUp, TrendingDown, BarChart3, Brain, Lightbulb, Target, Smile, Heart, Zap, Moon } from "lucide-react";
 import { motion } from "framer-motion";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Cell, AreaChart, Area, RadialBarChart, RadialBar } from 'recharts';
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
 
 interface MoodEntry {
   date: string;
@@ -23,7 +23,7 @@ interface MoodInsight {
   title: string;
   description: string;
   action?: string;
-  icon: any;
+  icon: React.ComponentType<{ className?: string }>;
 }
 
 export function MoodAnalytics() {
@@ -218,9 +218,9 @@ export function MoodAnalytics() {
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold">{metric.value}/10</div>
-                    <div className={`text-sm flex items-center ${parseFloat(metric.trend) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                      {parseFloat(metric.trend) >= 0 ? <TrendingUp className="w-3 h-3 mr-1" /> : <TrendingDown className="w-3 h-3 mr-1" />}
-                      {Math.abs(parseFloat(metric.trend))}%
+                    <div className={`text-sm flex items-center ${parseFloat(String(metric.trend)) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      {parseFloat(String(metric.trend)) >= 0 ? <TrendingUp className="w-3 h-3 mr-1" /> : <TrendingDown className="w-3 h-3 mr-1" />}
+                      {Math.abs(parseFloat(String(metric.trend)))}%
                     </div>
                   </div>
                 </div>
@@ -323,7 +323,7 @@ export function MoodAnalytics() {
               <CardContent>
                 <div className="w-full h-64">
                   <ResponsiveContainer width="100%" height="100%">
-                    <RechartsPieChart>
+                    <PieChart>
                       <Pie
                         data={getMoodDistribution()}
                         cx="50%"
@@ -333,17 +333,17 @@ export function MoodAnalytics() {
                         paddingAngle={5}
                         dataKey="value"
                       >
-                        {getMoodDistribution().map((entry, index) => (
+                        {getMoodDistribution().map((_entry, index) => (
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                       </Pie>
                       <Tooltip 
-                        formatter={(value: any, name: any, props: any) => [
+                        formatter={(value: number | string, name: string, props: { payload: { percentage: string } }) => [
                           `${value} days (${props.payload.percentage}%)`, 
                           name
                         ]}
                       />
-                    </RechartsPieChart>
+                    </PieChart>
                   </ResponsiveContainer>
                 </div>
                 <div className="grid grid-cols-2 gap-2 mt-4">
